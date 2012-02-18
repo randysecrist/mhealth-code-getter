@@ -1,0 +1,23 @@
+!!! 5
+%html
+	%head
+		%title mHealth Code Getter
+		%link{href: '/stylesheets/styles.css', rel: 'stylesheet'}
+	%body
+		.container
+			%header.jumbotron.subhead
+				%h1 mHealth Code Getter
+				%p.lead
+					Here's your code!
+			%section#code
+				%table.table-striped
+					%tbody
+						%tr
+							%th Code
+							%td&= code
+						%tr
+							%th App
+							%td&= key
+						%tr
+							%th Scopes
+							%td&= scope
