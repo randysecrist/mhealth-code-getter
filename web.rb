@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'rest_client'
 require 'compass'
 require 'bootstrap-sass'
+require 'json'
 
 class MhealthCodeGetter < Sinatra::Base
   enable :sessions
