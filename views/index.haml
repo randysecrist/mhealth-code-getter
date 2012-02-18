@@ -2,26 +2,36 @@
 %html
 	%head
 		%title mHealth Code Getter
+		%link{href: '/stylesheets/styles.css', rel: 'stylesheet'}
 	%body
-		%form{action: '/code', method: 'post'}
-			.control-group
-				%label.control-label{for: 'consumer_key'} Consumer Key
-				.controls
-					%input{id: 'consumer_key', name: 'consumer_key'}
-					%p.help-block
-						The application name on mHealth
-			.control-group
-				%label.control-label{for: 'consumer_secret'} Consumer Secret
-				.controls
-					%input{id: 'consumer_secret', name: 'consumer_secret'}
-			.control-group
-				%label.control-label{for: 'scope'} Scopes
-				.controls
-					%input{id: 'scope', name: 'scope'}
-					%p.help-block
-						The (space-separated) list of scopes you want to be authorized for. Some examples are:
-						%code /admin/health/source/withings
-						and
-						%code /read/health/data/fitbit
-			.form-actions
-				%button{type: 'submit', :class => 'btn btn-primary'} Get Code
+		.container
+			%header.jumbotron.subhead
+				%h1 mHealth Code Getter
+				%p.lead
+					This is a somewhat more convenient way to get your OAuth token for your mHealth app.
+			%section#form
+				.row
+					%form{action: '/code', method: 'post', :class => 'form-horizontal'}
+						%fieldset
+							%legend App Information
+							.control-group
+								%label.control-label{for: 'consumer_key'} Consumer Key
+								.controls
+									%input{id: 'consumer_key', name: 'consumer_key'}
+									%p.help-block
+										The application name on mHealth
+							.control-group
+								%label.control-label{for: 'consumer_secret'} Consumer Secret
+								.controls
+									%input{id: 'consumer_secret', name: 'consumer_secret'}
+							.control-group
+								%label.control-label{for: 'scope'} Scopes
+								.controls
+									%input{id: 'scope', name: 'scope'}
+									%p.help-block
+										The (space-separated) list of scopes you want to be authorized for. Some examples are:
+										%code /admin/health/source/withings
+										and
+										%code /read/health/data/fitbit
+						.form-actions
+							%button{type: 'submit', :class => 'btn btn-primary'} Get Code
