@@ -19,8 +19,9 @@ class MhealthCodeGetter < Sinatra::Base
     redirect_uri = request.url
     
     escaped_redirect_uri = CGI.escape redirect_uri
+    escaped_scope = CGI.escape scope
     
-    authorization_url = "https://mhealth.att.com/auth?client_id=#{key}&response_type=code&redirect_uri=#{escaped_redirect_uri}&scope=#{scope}"
+    authorization_url = "https://mhealth.att.com/auth?client_id=#{key}&response_type=code&redirect_uri=#{escaped_redirect_uri}&scope=#{escaped_scope}"
     
     session[:redirect_uri] = redirect_uri
     session[:key] = key
