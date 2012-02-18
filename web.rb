@@ -1,8 +1,12 @@
 require 'sinatra/base'
 require 'rest_client'
+require 'compass'
+require 'bootstrap-sass'
 
 class MhealthCodeGetter < Sinatra::Base
   enable :sessions
+  set :public_folder, File.join(File.dirname(__FILE__), 'static')
+  
   get '/' do
     haml :index
   end
@@ -20,6 +24,9 @@ class MhealthCodeGetter < Sinatra::Base
     session[:redirect_uri] = redirect_uri
     session[:key] = key
     session[:secret] = secret
+    session[:scope] = scope
+    
+    redirect authorization_url
   end
   
   get '/code' do
@@ -30,8 +37,14 @@ class MhealthCodeGetter < Sinatra::Base
     secret = session[:secret]
     
     auth_code_url = "https://#{key}:#{secret}@mhealth.att.com/access_token.json"
-    response = RestClient.post(auth_code_url, grant_type: 'authorization_code', code: code, redirect_uri: request.url)
+    response = RestClient.post(auth_code_url, grant_type: 'authorization_code', code: code, redirect_uri: session[:redirect_uri])
     
     access_token = JSON.parse(response)['access_token']
+    
+    haml :code, locals: {code: access_token, scope: session[:scope], key: session[:key]}
+  end
+  
+  get '/stuff.css' do
+    sass :stuff
   end
 end
