@@ -19,19 +19,17 @@ class MhealthCodeGetter < Sinatra::Base
     scope = params[:scope]
     redirect_uri = request.url
 
-    escaped_redirect_uri = CGI.escape redirect_uri
-    escaped_scope = CGI.escape scope
     query_params = {
       client_id: key,
       response_type: 'code',
-      redirect_uri: escaped_redirect_uri,
-      scope: escaped_scope
+      redirect_uri: redirect_uri,
+      scope: scope,
     }
     # optionals
-    query_params[:group_id] = group_id unless group_id.nil?
+    query_params[:ownership_key] = '_'
+    query_params[:provider_key] = group_id unless group_id.nil? || group_id.empty?
 
-    authorization_url = "https://mhealth.dev.attcompute.com/auth?#{URI.encode_www_form(query_params)}"
-    #authorization_url = "https://mhealth.att.com/auth?#{URI.encode_www_form(query_params)}"
+    authorization_url = "https://mhealth.att.com/auth?#{URI.encode_www_form(query_params)}"
 
     session[:redirect_uri] = redirect_uri
     session[:key] = key
