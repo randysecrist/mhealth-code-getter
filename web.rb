@@ -53,8 +53,12 @@ class MhealthCodeGetter < Sinatra::Base
 
     haml :code, locals: {code: access_token, scope: session[:scope], key: session[:key]}
   end
-  
+
   get '/stuff.css' do
     sass :stuff
+  end
+
+  get '/env' do
+    {:rack_env => ENV['RACK_ENV'], :sinatra => settings.environment}.to_json
   end
 end
