@@ -59,7 +59,7 @@ class MhealthCodeGetter < Sinatra::Base
   end
 
   get '/env' do
-    {:rack_env => ENV['RACK_ENV'], :sinatra => settings.environment}.to_json
+    {:rack_env => ENV['RACK_ENV'], :sinatra => settings.environment, :host => get_host}.to_json
   end
 
   def get_host
