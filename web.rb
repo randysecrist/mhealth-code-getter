@@ -29,7 +29,7 @@ class MhealthCodeGetter < Sinatra::Base
     query_params[:ownership_key] = '_'
     query_params[:provider_key] = group_id unless group_id.nil? || group_id.empty?
 
-    authorization_url = "https://#{get_host}/auth?#{URI.encode_www_form(query_params)}"
+    authorization_url = get_authorization_url(query_params)
 
     session[:redirect_uri] = redirect_uri
     session[:key] = key
@@ -37,6 +37,10 @@ class MhealthCodeGetter < Sinatra::Base
     session[:scope] = scope
 
     redirect authorization_url
+  end
+
+  def get_authorization_url(params = {})
+    return "https://#{get_host}/auth?#{URI.encode_www_form(params)}"
   end
 
   get '/code' do
@@ -59,18 +63,18 @@ class MhealthCodeGetter < Sinatra::Base
   end
 
   get '/env' do
-    {:rack_env => ENV['RACK_ENV'], :sinatra => settings.environment, :host => get_host}.to_json
+    {:rack_env => ENV['RACK_ENV'], :sinatra => settings.environment, :mhealth_target => get_authorization_url}.to_json
   end
 
   def get_host
     rtnval = nil
     case settings.environment
-    when 'production'
-      rtnval = 'mhealth.att.com'
-    when 'stage'
-      rtnval = 'mhealth.next.attcompute.com'
-    when 'dev'
-      rtnval = 'mhealth.dev.attcompute.com'
+      when :production
+        rtnval = 'mhealth.att.com'
+      when :stage
+        rtnval = 'mhealth.next.attcompute.com'
+      when :development
+        rtnval = 'mhealth.dev.attcompute.com'
     end
     rtnval
   end
