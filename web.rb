@@ -29,7 +29,7 @@ class MhealthCodeGetter < Sinatra::Base
     query_params[:ownership_key] = '_'
     query_params[:provider_key] = group_id unless group_id.nil? || group_id.empty?
 
-    authorization_url = "https://mhealth.att.com/auth?#{URI.encode_www_form(query_params)}"
+    authorization_url = "https://#{get_host}/auth?#{URI.encode_www_form(query_params)}"
 
     session[:redirect_uri] = redirect_uri
     session[:key] = key
@@ -46,7 +46,7 @@ class MhealthCodeGetter < Sinatra::Base
     key = session[:key]
     secret = session[:secret]
 
-    auth_code_url = "https://#{key}:#{secret}@mhealth.att.com/access_token.json"
+    auth_code_url = "https://#{key}:#{secret}@#{get_host}/access_token.json"
     response = RestClient.post(auth_code_url, grant_type: 'authorization_code', code: code, redirect_uri: session[:redirect_uri])
 
     access_token = JSON.parse(response)['access_token']
@@ -60,5 +60,18 @@ class MhealthCodeGetter < Sinatra::Base
 
   get '/env' do
     {:rack_env => ENV['RACK_ENV'], :sinatra => settings.environment}.to_json
+  end
+
+  def get_host
+    rtnval = nil
+    case settings.environment
+    when 'production'
+      rtnval = 'mhealth.att.com'
+    when 'stage'
+      rtnval = 'mhealth.next.attcompute.com'
+    when 'dev'
+      rtnval = 'mhealth.dev.attcompute.com'
+    end
+    rtnval
   end
 end
